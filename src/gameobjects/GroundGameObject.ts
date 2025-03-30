@@ -1,18 +1,13 @@
-import { GameObject, SpriteRenderBehavior } from "sprunk-engine";
-import {RepeatableScrollingLogicBehavior} from "../behaviors/transform/RepeatableScrollingLogicBehavior.ts";
-import {ScrollingSpeedManagerDriven} from "../behaviors/flappybird/ScrollingSpeedManagerDriven.ts";
+import { Collider, GameObject, PolygonCollider, SpriteRenderBehavior, Vector2 } from "sprunk-engine";
 
 /**
- * The ground for Flappy Bird
+ * The ground for Dodger
  */
 export class GroundGameObject extends GameObject {
-    private _id : number;
-    private _maxId : number;
+    private _collider: Collider | null = null;
 
-    constructor(id : number, maxId : number) {
+    constructor() {
         super("Ground");
-        this._id = id;
-        this._maxId = maxId;
     }
 
     protected onEnable() {
@@ -20,16 +15,23 @@ export class GroundGameObject extends GameObject {
         
         // Add ground sprite renderer
         this.addBehavior(
-            new SpriteRenderBehavior("/assets/sprites/base.png")
+            new SpriteRenderBehavior("/assets/sprites/ground.png")
         );
         
         // Scale the ground to cover the width of the screen
+
         this.transform.scale.set(10, 1, 1);
-        
-        // Add ground scrolling logic - using game manager for speed control
-        // The x and z values remain 0, y is set to negative game speed, keeping 0.5 for repeat offset
-        const scrollingLogic = new RepeatableScrollingLogicBehavior(this._maxId*5, -this._maxId*5, 0);
-        this.addBehavior(scrollingLogic);
-        this.addBehavior(new ScrollingSpeedManagerDriven(scrollingLogic));
+        this.transform.position.set(0, -4, 0);
+
+        // Add a horizontal with a height of 0.1 collider
+        const groundVertices = [
+            new Vector2(-5, -0.5),
+            new Vector2(5, -0.5),
+            new Vector2(5, 0.5),
+            new Vector2(-5, 0.5),
+        ];
+
+        this._collider = new PolygonCollider(groundVertices);
+        this.addBehavior(this._collider);
     }
 }
