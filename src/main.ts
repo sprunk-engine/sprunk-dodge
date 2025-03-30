@@ -1,5 +1,5 @@
 import { GameEngineWindow, Sprunk } from "sprunk-engine";
-import {ExampleScene} from "./gameobjects/scenes/ExampleScene.ts";
+import { DodgeScene } from "./gameobjects/scenes/DodgeScene.ts";
 
 const canvas: HTMLCanvasElement =
     document.querySelector<HTMLCanvasElement>("#app")!;
@@ -13,8 +13,9 @@ const debug = true;
 const gameEngineWindow: GameEngineWindow = Sprunk.newGame(canvas, debug, [
     "InputGameEngineComponent",
     "RenderGameEngineComponent",
+    "PhysicsGameEngineComponent",
 ]);
 
 //Go see what's in ExampleScene.ts !
-const startScene = new ExampleScene();
+const startScene = new DodgeScene();
 gameEngineWindow.root.addChild(startScene);
